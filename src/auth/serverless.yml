@@ -22,5 +22,3 @@ functions:
 
 plugins:
   - serverless-python-requirements
-
-
