@@ -5,10 +5,16 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.8
+  httpApi:
+    cors: true
 
 functions:
   authenticate:
     handler: auth.authenticate
+    events:
+      - httpApi:
+          method: GET
+          path: /test
 
 plugins:
   - serverless-python-requirements
