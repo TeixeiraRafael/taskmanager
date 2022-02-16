@@ -7,10 +7,12 @@ provider:
   runtime: python3.8
   httpApi:
     cors: true
+  environment:
+    PYTHONPATH: './src'
 
 functions:
   authenticate:
-    handler: auth.authenticate
+    handler: src/auth/auth.authenticate
     events:
       - httpApi:
           method: GET

@@ -2,17 +2,26 @@ import os
 import jwt
 import json
 
+import utils.testutil
+
 from dotenv import load_dotenv
 
 load_dotenv()
 AUTH_SECRET = os.getenv('AUTH_SECRET')
 
+
+
 def authenticate(event, context):
+    #extract user + password
+    #validate on the database
+    #sign token
+    #return
+
     encoded_jwt = jwt.encode({"some": "payload"}, AUTH_SECRET)
 
     body = {
         "message": "Go Serverless v3.0! Your function executed successfully!",
-        "input": event,
+        "input": utils.testutil.hello(),
         "token": str(encoded_jwt)
     }
 
