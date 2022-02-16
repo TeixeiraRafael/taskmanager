@@ -2,14 +2,13 @@ import os
 import jwt
 import json
 
-import utils.testutil
+import utils.testutil as testutil
+import db.testdb as testdb
 
 from dotenv import load_dotenv
 
 load_dotenv()
 AUTH_SECRET = os.getenv('AUTH_SECRET')
-
-
 
 def authenticate(event, context):
     #extract user + password
@@ -21,7 +20,8 @@ def authenticate(event, context):
 
     body = {
         "message": "Go Serverless v3.0! Your function executed successfully!",
-        "input": utils.testutil.hello(),
+        "testutil": testutil.hello(),
+        "testdb": testdb.test(),
         "token": str(encoded_jwt)
     }
 

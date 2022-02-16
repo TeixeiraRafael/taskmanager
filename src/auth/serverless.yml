@@ -8,11 +8,13 @@ provider:
   httpApi:
     cors: true
   environment:
-    PYTHONPATH: './src'
+    PYTHONPATH: '/opt'
 
 functions:
   authenticate:
-    handler: src/auth/auth.authenticate
+    handler: auth.authenticate
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: GET
@@ -20,4 +22,5 @@ functions:
 
 plugins:
   - serverless-python-requirements
+
 
