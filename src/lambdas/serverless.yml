@@ -9,12 +9,12 @@ provider:
     cors: true
   environment:
     PYTHONPATH: '/opt:/opt/python/lib/python3.8/site-packages'
+  layers:
+    - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
 
 functions:
   register:
     handler: user.register.lambda_handler
-    layers:
-      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: POST
@@ -22,8 +22,6 @@ functions:
   
   login:
     handler: user.login.lambda_handler
-    layers:
-      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: POST
@@ -31,17 +29,13 @@ functions:
   
   create_task:
     handler: task.create_task.lambda_handler
-    layers:
-      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: POST
           path: /task
   
-  update_tasks:
+  update_task:
     handler: task.update_task.lambda_handler
-    layers:
-      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: PUT
@@ -49,8 +43,6 @@ functions:
 
   get_tasks:
     handler: task.get_tasks.lambda_handler
-    layers:
-      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
     events:
       - httpApi:
           method: GET

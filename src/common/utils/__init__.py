@@ -24,7 +24,7 @@ def get_parsed_event_body(event):
 def get_body_parameter(body, parameter, required=False):
     value = body.get(parameter, None)
 
-    if not value and required:
+    if value == None and required:
         message = f"Validation error, missing {parameter} field"
         raise exceptions.InvalidRequest(message, message, http_status=401)
     

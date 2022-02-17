@@ -44,10 +44,11 @@ class RequestHandler():
                 'id': row.get('id'),
                 'name': row.get('name'),
                 'description': row.get('description'),
-                'done': row.get('done'),
+                'done': bool(row.get('done')),
                 'created_at': str(row.get('created_at')),
                 'updated_at': str(row.get('updated_at'))
             })
+            
         return json.dumps({'success': True, 'tasks': tasks})
 
 def lambda_handler(event, context):

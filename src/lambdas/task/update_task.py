@@ -28,7 +28,7 @@ class RequestHandler():
     def validate_request(self):
         decoded_token = auth.validate_token(self.access_token)
         self.user_id = decoded_token.get('user_id')
-
+        
         return self
     
     def process(self):
@@ -47,7 +47,7 @@ class RequestHandler():
             cursor.execute(query, (
                 self.name,
                 self.description,
-                self.done,
+                int(self.done),
                 timestamp,
                 self.task_id,
                 self.user_id
