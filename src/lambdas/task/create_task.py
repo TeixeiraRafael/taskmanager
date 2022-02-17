@@ -65,4 +65,4 @@ def lambda_handler(event, context):
         result = request_handler.parse_request().validate_request().process().format_response()
         return make_response(result, 200)
     except HandledException as e:
-        return make_response({'message': e.client_message}, e.http_status)
+        return make_response({'success': False, 'message': e.client_message}, e.http_status)

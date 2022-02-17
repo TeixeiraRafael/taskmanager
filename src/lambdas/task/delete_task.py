@@ -1,9 +1,11 @@
 import json
+import time
+import logging
+import datetime
 
 import db
 import utils
 import utils.auth as auth
-
 from utils import make_response
 from exceptions import HandledException
 
@@ -11,10 +13,11 @@ class RequestHandler():
 
     def __init__(self, event):
         self.event = event
-
+    
     def parse_request(self):
         self.body = utils.get_event_body(self.event)
         self.access_token = utils.get_body_parameter(self.body, 'access_token', required=True)
+        self.task_id = utils.get_path_parameter(self.event, 'task_id', required=True)
         return self
 
     def validate_request(self):
@@ -24,32 +27,32 @@ class RequestHandler():
 
     def process(self):
         connection = db.get_connection()
-        cursor = connection.cursor(dictionary=True)
+        cursor = connection.cursor()
 
-        query = "SELECT * FROM tasks WHERE user_id = %s AND ISNULL(deleted_at)"
+        query = """
+            UPDATE tasks SET deleted_at = %s WHERE id = %s AND user_id = %s AND ISNULL(deleted_at)
+        """
 
         try:
-            cursor.execute(query, (self.user_id, ))
-            print(cursor._executed)
-            self.result = cursor.fetchall()
+            ts = time.time()
+            timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            cursor.execute(query, (timestamp, self.task_id, self.user_id))
+            connection.commit()
+            if cursor.rowcount == 0:
+                raise Exception
+            
+            self.result = {
+                'success': True,
+                'message': "Task successfuly deleted!"
+            }
+
             return self
         except Exception as e:
-            message = "Failed to retrieve tasks - " + str(e)
+            message = "Failed to delete task."
             raise HandledException(message, message, 401)
-
+    
     def format_response(self):
-        tasks = []
-        for row in self.result:
-            tasks.append({
-                'id': row.get('id'),
-                'name': row.get('name'),
-                'description': row.get('description'),
-                'done': bool(row.get('done')),
-                'created_at': str(row.get('created_at')),
-                'updated_at': str(row.get('updated_at'))
-            })
-
-        return json.dumps({'success': True, 'tasks': tasks})
+        return json.dumps(self.result)
 
 def lambda_handler(event, context):
     request_handler = RequestHandler(event)
@@ -58,5 +61,3 @@ def lambda_handler(event, context):
         return make_response(result, 200)
     except HandledException as e:
         return make_response({'success': False, 'message': e.client_message}, e.http_status)
-
-    

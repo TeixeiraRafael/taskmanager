@@ -30,6 +30,24 @@ def get_body_parameter(body, parameter, required=False):
     
     return value
 
+def get_path_parameter(event, parameter, required=False):
+    path_parameters = event.get("pathParameters", "{}")
+    try:
+        if isinstance(path_parameters, str):
+            path_parameters = json.loads(path_parameters)
+        
+        value = path_parameters.get(parameter, None)
+
+        if value == None and required:
+            message = f"Validation error, missing {parameter} path parameter"
+            raise exceptions.InvalidRequest(message, message, http_status=401)
+
+        return value
+
+    except json.JSONDecodeError as e:
+        message = f"JSON decoding of event body failed: {e}"
+        raise exceptions.InvalidRequest(message, message)
+
 
 def make_response(body, status_code=200, content_type="application/json"):
     body = (

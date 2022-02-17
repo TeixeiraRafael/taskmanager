@@ -33,7 +33,13 @@ functions:
       - httpApi:
           method: POST
           path: /task
-  
+  get_tasks:
+    handler: task.get_tasks.lambda_handler
+    events:
+      - httpApi:
+          method: GET
+          path: /task
+
   update_task:
     handler: task.update_task.lambda_handler
     events:
@@ -41,12 +47,12 @@ functions:
           method: PUT
           path: /task
 
-  get_tasks:
-    handler: task.get_tasks.lambda_handler
+  delete_task:
+    handler: task.delete_task.lambda_handler
     events:
       - httpApi:
-          method: GET
-          path: /task
+          method: DELETE
+          path: /task/{task_id}
 
 
 plugins:
