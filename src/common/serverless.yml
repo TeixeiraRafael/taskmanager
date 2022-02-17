@@ -3,7 +3,7 @@ service: layers
 provider:
   name: aws
   runtime: python3.8
-    
+
 layers:
   common:
     path: ./ 

@@ -1,0 +1,41 @@
+{
+    "version": "2.0",
+    "routeKey": "POST /register",
+    "rawPath": "/register",
+    "rawQueryString": "",
+    "headers": {
+        "accept": "*/*",
+        "content-length": "55",
+        "content-type": "application/json",
+        "host": "6spv9qxdj5.execute-api.us-east-.amazonaws.com",
+        "user-agent": "insomnia/2021.7.2",
+        "x-amzn-trace-id": "Root=1-620d7b42-321253d30bc5fc443405a2d4",
+        "x-forwarded-for": "189.6.236.205",
+        "x-forwarded-port": "443",
+        "x-forwarded-proto": "https"
+    },
+    "requestContext": {
+        "accountId": "466178638856",
+        "apiId": "6spv9qxdj5",
+        "domainName": "6spv9qxdj5.execute-api.us-east-1.amazonaws.com",
+        "domainPrefix": "6spv9qxdj5",
+        "http": {
+            "method": "POST",
+            "path": "/register",
+            "protocol": "HTTP/1.1",
+            "sourceIp": "189.6.236.205",
+            "userAgent": "insomnia/2021.7.2"
+        },
+        "requestId": "NqAyfjFjoAMEPUA=",
+        "routeKey": "POST /register",
+        "stage": "$default",
+        "time": "16/Feb/2022:22:31:30 +0000",
+        "timeEpoch": 1645050690925
+    },
+    "body": {
+        "email": "rafael@mail.com",
+        "password": "1233456",
+        "username": "Rafael"
+    },
+    "isBase64Encoded": false
+}
