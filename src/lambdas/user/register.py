@@ -8,7 +8,7 @@ from utils import make_response
 import db
 from mysql.connector import IntegrityError
 
-from exceptions import InvalidRequest, HandledException
+from exceptions import HandledException
 from email_validator import validate_email, EmailNotValidError
 
 class RequestHandler:
@@ -31,7 +31,7 @@ class RequestHandler:
             return self
         except EmailNotValidError as email_error:
             message = str(email_error)
-            raise InvalidRequest(message, message, 401)
+            raise HandledException(message, message, 401)
 
     def process(self):
         self.password = bcrypt.hashpw(self.password.encode(), bcrypt.gensalt())
@@ -47,17 +47,20 @@ class RequestHandler:
             cursor.execute(query, (self.email, self.password, self.username))
             connection.commit()
 
-            self.result = {'success': True}
+            self.result = {
+                'success': True,
+                'message': "User successfully registered!"
+            }
+
             return self
 
         except IntegrityError:
             message = "An user with that email address is already registered."
-            raise InvalidRequest(message, message, 401)
+            raise HandledException(message, message, 401)
 
     def format_response(self):
         return json.dumps(self.result)
             
-
 
 def lambda_handler(event, context):
     request_handler = RequestHandler(event)

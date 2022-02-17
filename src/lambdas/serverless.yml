@@ -1,0 +1,61 @@
+service: taskmanager
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  httpApi:
+    cors: true
+  environment:
+    PYTHONPATH: '/opt:/opt/python/lib/python3.8/site-packages'
+
+functions:
+  register:
+    handler: user.register.lambda_handler
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
+    events:
+      - httpApi:
+          method: POST
+          path: /register
+  
+  login:
+    handler: user.login.lambda_handler
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
+    events:
+      - httpApi:
+          method: POST
+          path: /login
+  
+  create_task:
+    handler: task.create_task.lambda_handler
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
+    events:
+      - httpApi:
+          method: POST
+          path: /task
+  
+  update_tasks:
+    handler: task.update_task.lambda_handler
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
+    events:
+      - httpApi:
+          method: PUT
+          path: /task
+
+  get_tasks:
+    handler: task.get_tasks.lambda_handler
+    layers:
+      - "${cf:layers-dev.CommonLambdaLayerQualifiedArn}"
+    events:
+      - httpApi:
+          method: GET
+          path: /task
+
+
+plugins:
+  - serverless-python-requirements
